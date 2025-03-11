@@ -9,6 +9,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash && mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
+RUN mkdir -p /var/www/var && chmod -R 777 /var/www/var
+
 WORKDIR /var/www/
 
 CMD ["php-fpm"]
