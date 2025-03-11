@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: 'Statements API'
+  description: 'API documentation for car showcase API'
+  version: '1.0'
+paths:
+  '/cars/{id}':
+    get:
+      tags:
+        - car
+      summary: 'Получение информации о машине по id'
+      operationId: 5c5cc06106e0f425f3d4f94c962ac765
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Идентификатор машины'
+          required: true
+          schema:
+            type: integer
+            example: 123
+      responses:
+        '200':
+          description: 'Информация о машине'
+          content:
+            application/json:
+              schema:
+                properties:
+                  id: { type: integer, example: 1 }
+                  brand: { $ref: '#/components/schemas/Brand' }
+                  photo: { type: string, format: base64, example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEU', nullable: true }
+                  price: { type: integer, example: 3500000 }
+                type: object
+        '404':
+          description: 'User not found'
+  /cars:
+    get:
+      tags:
+        - car
+      summary: 'Получение всех машин'
+      operationId: 0fee92465870c691a4d9493e0146b91f
+      responses:
+        '200':
+          description: 'Информация о машинах'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+        '404':
+          description: 'Users not found'
+  /credit/calculate:
+    get:
+      tags:
+        - credit
+      summary: 'Расчет кредита по указанным параметрам'
+      operationId: 3050e453a4ad26dda5f3cf7797b01d88
+      parameters:
+        -
+          name: price
+          in: query
+          description: 'Цена автомобиля'
+          required: true
+          schema:
+            type: integer
+            example: 1401000
+        -
+          name: initialPayment
+          in: query
+          description: 'Первоначальный взнос (рубли с копейками)'
+          required: true
+          schema:
+            type: number
+            format: float
+            example: 200000.56
+        -
+          name: loanTerm
+          in: query
+          description: 'Срок кредита в месяцах'
+          required: true
+          schema:
+            type: integer
+            example: 64
+      responses:
+        '200':
+          description: 'Результат расчета кредита'
+          content:
+            application/json:
+              schema:
+                properties:
+                  programId: { type: integer, example: 1 }
+                  interestRate: { type: number, format: float, example: 12.3 }
+                  monthlyPayment: { type: integer, example: 24276 }
+                  title: { type: string, example: 'Alfa Energy' }
+                type: object
+        '404':
+          description: 'Credit program not found'
+  /request:
+    post:
+      tags:
+        - statement
+      summary: 'Создание заявки на кредит'
+      operationId: b2f3835f9d0f99058b595c748e27c3ae
+      requestBody:
+        description: 'Данные для создания заявки'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatementDto'
+      responses:
+        '200':
+          description: 'Заявка успешно создана'
+          content:
+            application/json:
+              schema:
+                properties:
+                  success: { type: boolean, example: true }
+                type: object
+        '400':
+          description: 'Validation error'
+        '404':
+          description: 'Car or credit program not found'
+components:
+  schemas:
+    StatementDto:
+      required:
+        - carId
+        - programId
+        - initialPayment
+        - loanTerm
+      properties:
+        carId:
+          type: integer
+          example: 1
+        programId:
+          type: integer
+          example: 2
+        initialPayment:
+          type: integer
+          example: 200000
+        loanTerm:
+          type: integer
+          example: 5
+      type: object
+    Brand:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Мерседес
+      type: object
+    Car:
+      properties:
+        id:
+          type: integer
+          example: 1
+        brand:
+          $ref: '#/components/schemas/Brand'
+        model:
+          $ref: '#/components/schemas/Model'
+        photo:
+          type: string
+          format: base64
+          example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEU'
+          nullable: true
+        price:
+          type: integer
+          example: 3500000
+      type: object
+    Model:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Внедорожник
+      type: object
+tags:
+  -
+    name: car
+    description: car
+  -
+    name: credit
+    description: credit
+  -
+    name: statement
+    description: statement
