@@ -12,9 +12,34 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use OpenApi\Attributes as OA;
 
 final class StatementController extends AbstractController
 {
+    #[OA\Post(
+        path: "/request",
+        summary: "Создание заявки на кредит",
+        requestBody: new OA\RequestBody(
+            description: "Данные для создания заявки",
+            required: true,
+            content: new OA\JsonContent(ref: "#/components/schemas/StatementDto")
+        ),
+        tags: ["statement"],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Заявка успешно создана",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "success", type: "boolean", example: true)
+                    ],
+                    type: "object"
+                )
+            ),
+            new OA\Response(response: 400, description: "Validation error"),
+            new OA\Response(response: 404, description: "Car or credit program not found"),
+        ]
+    )]
     #[Route('/request', name: 'statement_save', methods: ['POST'], format: 'JSON')]
     public function save(
         #[MapRequestPayload] StatementDto $dto,

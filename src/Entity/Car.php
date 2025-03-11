@@ -3,8 +3,18 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Ignore;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: "Car",
+    properties: [
+        new OA\Property(property: "id", type: "integer", example: 1),
+        new OA\Property(property: "brand", ref: "#/components/schemas/Brand"),
+        new OA\Property(property: "model", ref: "#/components/schemas/Model"),
+        new OA\Property(property: "photo", type: "string", format: "base64", example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEU", nullable: true),
+        new OA\Property(property: "price", type: "integer", example: 3500000)
+    ]
+)]
 #[ORM\Entity]
 class Car
 {
