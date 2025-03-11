@@ -4,12 +4,12 @@ info:
   description: 'API documentation for car showcase API'
   version: '1.0'
 paths:
-  '/cars/{id}':
+  '/api/v1/cars/{id}':
     get:
       tags:
         - car
       summary: 'Получение информации о машине по id'
-      operationId: 5c5cc06106e0f425f3d4f94c962ac765
+      operationId: 9ab16d5f1b6fe5450f563e3d13f3dff8
       parameters:
         -
           name: id
@@ -25,20 +25,15 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  id: { type: integer, example: 1 }
-                  brand: { $ref: '#/components/schemas/Brand' }
-                  photo: { type: string, format: base64, example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEU', nullable: true }
-                  price: { type: integer, example: 3500000 }
-                type: object
+                $ref: '#/components/schemas/Car'
         '404':
           description: 'User not found'
-  /cars:
+  /api/v1/cars:
     get:
       tags:
         - car
       summary: 'Получение всех машин'
-      operationId: 0fee92465870c691a4d9493e0146b91f
+      operationId: 62315680489935fa0424a83285b3f92b
       responses:
         '200':
           description: 'Информация о машинах'
@@ -47,15 +42,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Car'
+                  properties: { id: { type: integer, example: 1 }, brand: { $ref: '#/components/schemas/Brand' }, photo: { type: string, format: base64, example: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEU', nullable: true }, price: { type: integer, example: 3500000 } }
+                  type: object
         '404':
           description: 'Users not found'
-  /credit/calculate:
+  /api/v1/credit/calculate:
     get:
       tags:
         - credit
       summary: 'Расчет кредита по указанным параметрам'
-      operationId: 3050e453a4ad26dda5f3cf7797b01d88
+      operationId: a67c4723c134aecdb1e81637b93dc6af
       parameters:
         -
           name: price
@@ -96,12 +92,12 @@ paths:
                 type: object
         '404':
           description: 'Credit program not found'
-  /request:
+  /api/v1/request:
     post:
       tags:
         - statement
       summary: 'Создание заявки на кредит'
-      operationId: b2f3835f9d0f99058b595c748e27c3ae
+      operationId: 4cb0579b7c053d3785b06a5fabdb10c3
       requestBody:
         description: 'Данные для создания заявки'
         required: true

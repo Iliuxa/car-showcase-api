@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
 final class CreditController extends AbstractController
 {
     #[OA\Get(
-        path: "/credit/calculate",
+        path: "/api/v1/credit/calculate",
         summary: "Расчет кредита по указанным параметрам",
         tags: ["credit"],
         parameters: [

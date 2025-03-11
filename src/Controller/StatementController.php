@@ -17,7 +17,7 @@ use OpenApi\Attributes as OA;
 final class StatementController extends AbstractController
 {
     #[OA\Post(
-        path: "/request",
+        path: "/api/v1/request",
         summary: "Создание заявки на кредит",
         requestBody: new OA\RequestBody(
             description: "Данные для создания заявки",
@@ -46,10 +46,10 @@ final class StatementController extends AbstractController
         EntityManagerInterface            $entityManager
     ): JsonResponse
     {
-        $car = $entityManager->getReference(Car::class, $dto->carId)
+        $car = $entityManager->find(Car::class, $dto->carId)
             ?? throw new NotFoundHttpException('Car not found');
 
-        $creditProgram = $entityManager->getReference(CreditProgram::class, $dto->programId)
+        $creditProgram = $entityManager->find(CreditProgram::class, $dto->programId)
             ?? throw new NotFoundHttpException('Credit Program not found');
 
         $statement = (new Statement())
